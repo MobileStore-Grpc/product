@@ -1,0 +1,16 @@
+syntax = "proto3";
+package pb;
+option go_package = "github.com/MobileStore-Grpc/product/pb";
+import "mobile_message.proto";
+import "google/api/annotations.proto";
+message CreateMobileRequest { Mobile mobile = 1; }
+message CreateMobileResponse { string id = 1; }
+
+service MobileService {
+  rpc CreateMobile(CreateMobileRequest) returns (CreateMobileResponse) {
+    option (google.api.http) = {
+      post : "/v1/product/create"
+      body : "*"
+    };
+  };
+}
