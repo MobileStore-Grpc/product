@@ -47,6 +47,36 @@
           "MobileService"
         ]
       }
+    },
+    "/v1/product/search": {
+      "get": {
+        "operationId": "MobileService_SearchMobile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbSearchMobileResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "mobileId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "MobileService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -237,6 +267,14 @@
         },
         "multitouch": {
           "type": "boolean"
+        }
+      }
+    },
+    "pbSearchMobileResponse": {
+      "type": "object",
+      "properties": {
+        "mobile": {
+          "$ref": "#/definitions/pbMobile"
         }
       }
     },

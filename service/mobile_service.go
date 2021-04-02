@@ -67,6 +67,23 @@ func (server *MobileService) CreateMobile(ctx context.Context, req *pb.CreateMob
 	}
 	return res, nil
 }
+func (server *MobileService) SearchMobile(ctx context.Context, req *pb.SearchMobileRequest) (*pb.SearchMobileResponse, error) {
+	mobile_id := req.GetMobileId()
+	log.Printf("receive a search-laptop request with mobile_id: %v", mobile_id)
+	mobile, err := server.mobileStore.Search(mobile_id)
+	res := &pb.SearchMobileResponse{
+		Mobile: mobile,
+	}
+	if err != nil {
+		return nil, logError(status.Errorf(codes.Internal, "cannot find laptop: %v", err))
+	}
+
+	if mobile == nil {
+		return nil, logError(status.Errorf(codes.InvalidArgument, "laptop %s doesn't exist", err))
+	}
+	return res, nil
+
+}
 
 func contextError(ctx context.Context) error {
 	switch ctx.Err() {

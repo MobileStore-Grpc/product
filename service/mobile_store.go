@@ -24,7 +24,7 @@ type MobileStore interface {
 	// Save the laptop to the store
 	Save(mobile *pb.Mobile) error
 	//Find finds a laptop by ID
-	Find(id string) (*pb.Mobile, error)
+	Search(id string) (*pb.Mobile, error)
 	// Search searches for laptops with filter, return one by one via the found function
 	// Search(ctx context.Context, filter *pb.Filter, found func(laptop *pb.Laptop) error) error
 }
@@ -53,7 +53,7 @@ func (store *InMemoryMobileStore) Save(mobile *pb.Mobile) error {
 }
 
 //Find finds a laptop by ID
-func (store *InMemoryMobileStore) Find(id string) (*pb.Mobile, error) {
+func (store *InMemoryMobileStore) Search(id string) (*pb.Mobile, error) {
 	store.mutex.RLock()
 	defer store.mutex.RUnlock()
 	mobile := store.data[id]

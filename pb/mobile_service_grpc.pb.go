@@ -19,6 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MobileServiceClient interface {
 	CreateMobile(ctx context.Context, in *CreateMobileRequest, opts ...grpc.CallOption) (*CreateMobileResponse, error)
+	SearchMobile(ctx context.Context, in *SearchMobileRequest, opts ...grpc.CallOption) (*SearchMobileResponse, error)
 }
 
 type mobileServiceClient struct {
@@ -38,11 +39,21 @@ func (c *mobileServiceClient) CreateMobile(ctx context.Context, in *CreateMobile
 	return out, nil
 }
 
+func (c *mobileServiceClient) SearchMobile(ctx context.Context, in *SearchMobileRequest, opts ...grpc.CallOption) (*SearchMobileResponse, error) {
+	out := new(SearchMobileResponse)
+	err := c.cc.Invoke(ctx, "/pb.MobileService/SearchMobile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MobileServiceServer is the server API for MobileService service.
 // All implementations must embed UnimplementedMobileServiceServer
 // for forward compatibility
 type MobileServiceServer interface {
 	CreateMobile(context.Context, *CreateMobileRequest) (*CreateMobileResponse, error)
+	SearchMobile(context.Context, *SearchMobileRequest) (*SearchMobileResponse, error)
 	mustEmbedUnimplementedMobileServiceServer()
 }
 
@@ -52,6 +63,9 @@ type UnimplementedMobileServiceServer struct {
 
 func (UnimplementedMobileServiceServer) CreateMobile(context.Context, *CreateMobileRequest) (*CreateMobileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateMobile not implemented")
+}
+func (UnimplementedMobileServiceServer) SearchMobile(context.Context, *SearchMobileRequest) (*SearchMobileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchMobile not implemented")
 }
 func (UnimplementedMobileServiceServer) mustEmbedUnimplementedMobileServiceServer() {}
 
@@ -84,6 +98,24 @@ func _MobileService_CreateMobile_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MobileService_SearchMobile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchMobileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MobileServiceServer).SearchMobile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.MobileService/SearchMobile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MobileServiceServer).SearchMobile(ctx, req.(*SearchMobileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MobileService_ServiceDesc is the grpc.ServiceDesc for MobileService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -94,6 +126,10 @@ var MobileService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateMobile",
 			Handler:    _MobileService_CreateMobile_Handler,
+		},
+		{
+			MethodName: "SearchMobile",
+			Handler:    _MobileService_SearchMobile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
