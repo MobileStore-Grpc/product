@@ -32,7 +32,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	//This pb.LaptopServiceClient will execute method CreateLaptop implemented by "LaptopServe struct" in laptop_server.go  and register in server/main.go using "pb.RegisterLaptopServiceServer(grpcServer, laptopServer)"
-	res, err := mobileClient.CreateMobile(ctx, req)
+	mobile, err := mobileClient.CreateMobile(ctx, req)
 	if err != nil {
 		st, ok := status.FromError(err)
 		if ok && st.Code() == codes.AlreadyExists {
@@ -42,5 +42,20 @@ func main() {
 		}
 	}
 
-	log.Printf("create laptop with id: %s", res.Id)
+	log.Printf("create laptop with id: %s", mobile.Id)
+
+	req2 := &pb.SearchMobileRequest{
+		MobileId: mobile.Id,
+	}
+	mobile2, err := mobileClient.SearchMobile(ctx, req2)
+	if err != nil {
+		st, ok := status.FromError(err)
+		if ok && st.Code() == codes.Internal {
+			log.Print("cannot find mobile")
+		} else {
+			log.Fatal("mobile doesn't exist: ", err)
+		}
+	}
+
+	log.Printf("find mobile with id: %s", mobile2.GetMobile().GetId())
 }

@@ -12,30 +12,30 @@ import (
 //ErrAlreadyExits is returned when a record with the same ID already exist in the data store
 var ErrAlreadyExits = errors.New("mobile with same specification already exist")
 
-// NewInMemoryLaptopStore returns a new NewInMemoryLaptopStore object
+// NewInMemoryMobileStore returns a new NewInMemoryMobileStore object
 func NewInMemoryMobileStore() *InMemoryMobileStore {
 	return &InMemoryMobileStore{
 		data: make(map[string]*pb.Mobile),
 	}
 }
 
-// LaptopStore is an interface to store laptop
+// MobileStore is an interface to store and search mobile
 type MobileStore interface {
-	// Save the laptop to the store
+	// Save the mobile to the store
 	Save(mobile *pb.Mobile) error
-	//Find finds a laptop by ID
+	//Find finds a mobile by ID
 	Search(id string) (*pb.Mobile, error)
 	// Search searches for laptops with filter, return one by one via the found function
 	// Search(ctx context.Context, filter *pb.Filter, found func(laptop *pb.Laptop) error) error
 }
 
-// InMemoryLaptopStore stores laptop in memory
+// InMemoryMobileStore stores mobile in memory
 type InMemoryMobileStore struct {
 	mutex sync.RWMutex
 	data  map[string]*pb.Mobile
 }
 
-// Save saves the laptop to the store
+// Save saves the mobile to the store
 func (store *InMemoryMobileStore) Save(mobile *pb.Mobile) error {
 	store.mutex.Lock()
 	defer store.mutex.Unlock()

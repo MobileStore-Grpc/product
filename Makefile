@@ -16,10 +16,10 @@ rest:
 	go run cmd/server/main.go --port 8082 --type rest --endpoint 0.0.0.0:8080
 
 client:
-	go run cmd/client/main.go --address 0.0.0.0:8080
+	go run cmd/client/main.go --address 0.0.0.0:9080
 
 build-image:
-	docker build -t mobilestore-product:v1.1.0 .
+	docker build -t mobilestore-product:v1.1.2 .
 
 run:
-	docker run -d --name product -p 9080:8080 mobilestore-product:v1.1.0
+	docker run -d --name product -p 9080:8080 mobilestore-product:v1.1.2

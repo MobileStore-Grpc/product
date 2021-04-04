@@ -67,6 +67,8 @@ func (server *MobileService) CreateMobile(ctx context.Context, req *pb.CreateMob
 	}
 	return res, nil
 }
+
+//SearchMobile is a unary RPC to search a existing mobile
 func (server *MobileService) SearchMobile(ctx context.Context, req *pb.SearchMobileRequest) (*pb.SearchMobileResponse, error) {
 	mobile_id := req.GetMobileId()
 	log.Printf("receive a search-laptop request with mobile_id: %v", mobile_id)
@@ -75,14 +77,13 @@ func (server *MobileService) SearchMobile(ctx context.Context, req *pb.SearchMob
 		Mobile: mobile,
 	}
 	if err != nil {
-		return nil, logError(status.Errorf(codes.Internal, "cannot find laptop: %v", err))
+		return nil, logError(status.Errorf(codes.Internal, "cannot find mobile: %v", err))
 	}
 
 	if mobile == nil {
-		return nil, logError(status.Errorf(codes.InvalidArgument, "laptop %s doesn't exist", err))
+		return nil, logError(status.Errorf(codes.InvalidArgument, "mobile %s doesn't exist", err))
 	}
 	return res, nil
-
 }
 
 func contextError(ctx context.Context) error {
