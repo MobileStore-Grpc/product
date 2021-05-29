@@ -1,0 +1,323 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "mobile_service.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "MobileService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/product/create": {
+      "post": {
+        "operationId": "MobileService_CreateMobile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbCreateMobileResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbCreateMobileRequest"
+            }
+          }
+        ],
+        "tags": [
+          "MobileService"
+        ]
+      }
+    },
+    "/v1/product/search": {
+      "get": {
+        "operationId": "MobileService_SearchMobile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbSearchMobileResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "mobileId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "MobileService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "MemoryUnit": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "BIT",
+        "BYTE",
+        "KILOBYTE",
+        "MEGABYTE",
+        "GIGABYTE",
+        "TERABYTE"
+      ],
+      "default": "UNKNOWN"
+    },
+    "ScreenPanel": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "IPS",
+        "OLED"
+      ],
+      "default": "UNKNOWN"
+    },
+    "ScreenResolution": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "height": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "StorageDriver": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "HDD",
+        "SSD"
+      ],
+      "default": "UNKNOWN"
+    },
+    "pbCPU": {
+      "type": "object",
+      "properties": {
+        "brand": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "numberCores": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "numberThreads": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "minGhz": {
+          "type": "number",
+          "format": "double"
+        },
+        "maxGhz": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "pbCreateMobileRequest": {
+      "type": "object",
+      "properties": {
+        "mobile": {
+          "$ref": "#/definitions/pbMobile"
+        }
+      }
+    },
+    "pbCreateMobileResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "pbGPU": {
+      "type": "object",
+      "properties": {
+        "brand": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "minGhz": {
+          "type": "number",
+          "format": "double"
+        },
+        "maxGhz": {
+          "type": "number",
+          "format": "double"
+        },
+        "memory": {
+          "$ref": "#/definitions/pbMemory"
+        }
+      }
+    },
+    "pbMemory": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "unit": {
+          "$ref": "#/definitions/MemoryUnit"
+        }
+      }
+    },
+    "pbMobile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "brand": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "cpu": {
+          "$ref": "#/definitions/pbCPU"
+        },
+        "ram": {
+          "$ref": "#/definitions/pbMemory"
+        },
+        "gpus": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/pbGPU"
+          }
+        },
+        "storages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/pbStorage"
+          }
+        },
+        "screen": {
+          "$ref": "#/definitions/pbScreen"
+        },
+        "weightKg": {
+          "type": "number",
+          "format": "double"
+        },
+        "weightLb": {
+          "type": "number",
+          "format": "double"
+        },
+        "priceInr": {
+          "type": "number",
+          "format": "double"
+        },
+        "releaseYear": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "pbScreen": {
+      "type": "object",
+      "properties": {
+        "sizeInch": {
+          "type": "number",
+          "format": "float"
+        },
+        "resolution": {
+          "$ref": "#/definitions/ScreenResolution"
+        },
+        "panel": {
+          "$ref": "#/definitions/ScreenPanel"
+        },
+        "multitouch": {
+          "type": "boolean"
+        }
+      }
+    },
+    "pbSearchMobileResponse": {
+      "type": "object",
+      "properties": {
+        "mobile": {
+          "$ref": "#/definitions/pbMobile"
+        }
+      }
+    },
+    "pbStorage": {
+      "type": "object",
+      "properties": {
+        "driver": {
+          "$ref": "#/definitions/StorageDriver"
+        },
+        "memory": {
+          "$ref": "#/definitions/pbMemory"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "typeUrl": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
